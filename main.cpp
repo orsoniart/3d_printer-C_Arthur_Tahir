@@ -1,25 +1,116 @@
-#include <iostream>
+#include <stdio.h>
 
-// TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+#ifdef _WIN32
+#include <windows.h>
+#define usleep(x) Sleep((x) / 1000)
+#define sleep(x) Sleep((x) * 1000)
+#else
+#include <unistd.h>
+#endif
+
+// Funktionsdeklarationen
+void files_suchen();
+void drucken();
+void vorheizen();
+void spule_wechseln();
+
+// Hauptfunktion mit Menü
 int main() {
-    // TIP Press <shortcut actionId="RenameElement"/> when your caret is at the
-    // <b>lang</b> variable name to see how CLion can help you rename it.
-    auto lang = "C++";
-    std::cout << "Hello and welcome to " << lang << "!\n";
+    int auswahl;
 
-    for (int i = 1; i <= 5; i++) {
-        // TIP Press <shortcut actionId="Debug"/> to start debugging your code.
-        // We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/>
-        // breakpoint for you, but you can always add more by pressing
-        // <shortcut actionId="ToggleLineBreakpoint"/>.
-        std::cout << "i = " << i << std::endl;
+    while (1) {
+        printf("\n=== 3D DRUCKER MENÜ ===\n");
+        printf("1 - Files suchen\n");
+        printf("2 - Drucken\n");
+        printf("3 - Vorheizen\n");
+        printf("4 - Spule wechseln\n");
+        printf("0 - Beenden\n");
+        printf("Auswahl: ");
+        scanf("%d", &auswahl);
+
+        switch (auswahl) {
+            case 1: files_suchen(); break;
+            case 2: drucken(); break;
+            case 3: vorheizen(); break;
+            case 4: spule_wechseln(); break;
+            case 0: return 0;
+            default: printf("Ungültige Eingabe.\n");
+        }
     }
-
-    return 0;
 }
 
-// TIP See CLion help at <a
-// href="https://www.jetbrains.com/help/clion/">jetbrains.com/help/clion/</a>.
-//  Also, you can try interactive lessons for CLion by selecting
-//  'Help | Learn IDE Features' from the main menu.
+// Funktionsdefinitionen
+
+void files_suchen() {
+    printf("Funktion: files_suchen\n");
+}
+
+void drucken() {
+    printf("Funktion: drucken\n");
+
+    int zielTemp = 240; // Beispielwert
+    int dauer = 30;     // Beispiel: 30 Sekunden
+
+    printf("Datei gelesen: Zieltemperatur = %d°C, Druckdauer = %ds\n", zielTemp, dauer);
+
+    int temp = 0;
+    while (temp < zielTemp) {
+        temp += 5;
+        printf("Temperatur: %d°C\n", temp);
+        usleep(100000);
+    }
+
+    printf("Spule dreht (Filament wird eingezogen)...\n");
+    sleep(2);
+
+    printf("Druckvorgang läuft...\n");
+    sleep(2);
+
+    printf("Druck abgeschlossen!\n");
+}
+
+void vorheizen() {
+    int ziel;
+    printf("VORHEIZEN\nGewünschte Temperatur (°C): ");
+    scanf("%d", &ziel);
+
+    int temp = 0;
+    while (temp < ziel) {
+        temp++;
+        printf("Temperatur: %d°C\n", temp);
+        usleep(100000);
+    }
+
+    printf("Vorheizen abgeschlossen.\n");
+}
+
+void spule_wechseln() {
+    char ok;
+    printf("SPULENWECHSEL\nDeckel öffnen und OK drücken (Taste o): ");
+    scanf(" %c", &ok);
+
+    int temp = 0;
+    while (temp < 240) {
+        temp += 5;
+        printf("Temperatur: %d°C\n", temp);
+        usleep(100000);
+    }
+
+    printf("Filament wird entfernt (gegen Uhrzeigersinn)...\n");
+    sleep(4);
+
+    printf("Neue Spule einsetzen und OK drücken (Taste o): ");
+    scanf(" %c", &ok);
+
+    printf("Filament wird geladen (Uhrzeigersinn)...\n");
+    sleep(2);
+
+    while (temp > 0) {
+        temp -= 10;
+        if (temp < 0) temp = 0;
+        printf("Abkühlen: %d°C\n", temp);
+        usleep(100000);
+    }
+
+    printf("Spulenwechsel abgeschlossen.\n");
+}
